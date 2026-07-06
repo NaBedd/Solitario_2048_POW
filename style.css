@@ -132,6 +132,20 @@ html, body {
   padding: 8px;
 }
 
+.deck-container {
+  display: flex;
+  gap: 24px;
+  align-items: flex-end; /* Alinea ambas cartas por su base */
+  justify-content: center;
+  width: 100%;
+}
+
+.next-deck-area {
+  transform: scale(0.99); /* Reduce el tamaño */
+  opacity: 0.85; /* La hace un poco transparente */
+  transform-origin: bottom left; /* Evita que flote al encogerse */
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

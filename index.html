@@ -31,12 +31,21 @@
     </aside>
 
     <section class="play-area">
-      <div class="deck-area">
-        <div class="deck-label">Siguiente carta</div>
-        <div id="deck" class="deck">
-          <div id="current-card" class="card">-</div>
-        </div>
-      </div>
+      <div class="deck-container">
+            <div class="deck-area">
+              <div class="deck-label">Carta actual</div>
+              <div id="deck" class="deck">
+                <div id="current-card" class="card">-</div>
+              </div>
+            </div>
+
+            <div class="deck-area next-deck-area">
+              <div class="deck-label">Próxima</div>
+              <div id="next-deck" class="deck">
+                <div id="next-card" class="card">-</div>
+              </div>
+            </div>
+          </div>
 
       <section id="board" class="board">
         <div class="column" data-col="0"><div class="col-inner"></div></div>

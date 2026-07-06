@@ -7,6 +7,7 @@
   const state = {
     columns: [[], [], [], []],
     current: null,
+    next: null, 
     score: 0,
     gameOver: false,
     hasWonOnce: false,
@@ -17,6 +18,7 @@
   const scoreEl = document.getElementById("score");
   const restartBtn = document.getElementById("restart");
   const messageEl = document.getElementById("message");
+  const nextCardEl = document.getElementById("next-card");
 
   function randomCardValue() {
     return INITIAL_VALUES[Math.floor(Math.random() * INITIAL_VALUES.length)];
@@ -26,9 +28,16 @@
     return `v-${value}`;
   }
 
-  function renderCurrent() {
+function renderCurrent() {
+    // Dibuja la carta actual
     currentCardEl.className = "card " + valueClass(state.current);
     currentCardEl.textContent = state.current;
+    
+    // Dibuja la próxima carta (NUEVO)
+    if (nextCardEl) {
+      nextCardEl.className = "card " + valueClass(state.next);
+      nextCardEl.textContent = state.next;
+    }
   }
 
   function renderBoard(highlight) {
@@ -113,8 +122,8 @@
       return;
     }
 
-    state.current = randomCardValue();
-    renderCurrent();
+    state.current = state.next;
+    state.next = randomCardValue();    renderCurrent();
   }
 
   function checkDefeat() {
@@ -147,18 +156,23 @@
     messageEl.classList.remove("hidden");
     document.getElementById("msg-continue").addEventListener("click", () => {
       messageEl.classList.add("hidden");
-      state.current = randomCardValue();
+      state.current = state.next;
+      state.next = randomCardValue();
       renderCurrent();
     });
     document.getElementById("msg-restart").addEventListener("click", reset);
   }
 
-  function reset() {
+function reset() {
     state.columns = [[], [], [], []];
     state.score = 0;
     state.gameOver = false;
     state.hasWonOnce = false;
+    
+    // Genera ambas cartas
     state.current = randomCardValue();
+    state.next = randomCardValue(); 
+    
     messageEl.classList.add("hidden");
     renderCurrent();
     renderBoard();
