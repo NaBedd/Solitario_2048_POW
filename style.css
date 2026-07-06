@@ -1,0 +1,299 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #1a1626;
+  --panel: #241f36;
+  --panel-2: #2e2846;
+  --border: #3a3358;
+  --text: #f5f2ff;
+  --muted: #a89ec9;
+  --accent: #ffb020;
+}
+
+html, body {
+  min-height: 100vh; /* Cambiamos 100% por 100vh para referenciar la ventana */
+  margin: 0;
+  display: flex; /* Añadimos flexbox para manejar el espacio sobrante */
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(circle at top, #2a2340 0%, var(--bg) 60%);
+  color: var(--text);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  background: rgba(0,0,0,0.25);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  position: sticky; /* NUEVO: Mantiene el puntaje siempre visible arriba */
+  top: 0;
+  z-index: 100;
+}
+
+.topbar h1 {
+  font-size: 20px;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+.accent { color: var(--accent); }
+
+.controls { display: flex; align-items: center; gap: 12px; }
+
+.score {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+.score-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.score-value { font-size: 18px; font-weight: 700; color: var(--accent); }
+
+.btn {
+  background: var(--accent);
+  color: #1a1626;
+  border: none;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(255,176,32,0.35); }
+.btn:active { transform: translateY(0); }
+
+.game {
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) 1fr;
+  gap: 20px;
+  padding: 20px;
+  align-items: start;
+  max-width: 1100px;
+  margin: 0 auto;
+  flex: 1; /* NUEVO: Permite que el área de juego ocupe el espacio restante */
+}
+
+.how-to {
+  background: rgba(255,255,255,0.02);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.how-to h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 10px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+.how-to ol { padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.how-to strong { color: var(--accent); opacity: 0.9; font-weight: 600; }
+
+.play-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Centra el contenido si hay espacio vertical sobrante */
+  gap: 20px;
+  min-width: 0;
+  width: 100%; /* Asegura que ocupe todo el espacio que le da la cuadrícula */
+}
+
+.deck-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.deck-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 2px;
+}
+.deck {
+  background: var(--panel);
+  border: 2px dashed var(--border);
+  border-radius: 14px;
+  padding: 8px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(6px, 1.5vh, 12px); /* Espaciado que crece con la pantalla */
+  background: var(--panel);
+  padding: clamp(8px, 2vh, 16px);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  
+  /* El tamaño ahora es dictado por el 78% del alto de la ventana */
+  height: 78vh; 
+  min-height: 450px; /* Límite mínimo para no aplastarse en móviles */
+  max-height: 850px; /* Límite máximo para pantallas gigantes */
+  max-width: 100%; /* Evita desbordamientos horizontales en teléfonos */
+  
+  /* Proporción de 4 columnas de ancho por 6 relativas de alto */
+  aspect-ratio: 4 / 6; 
+  margin: 0 auto;
+}
+
+.column {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+  padding: 4px;
+  display: flex;
+  position: relative;
+  /* Ya no necesitamos height al 100% ni aspect-ratio aquí, 
+     el grid del .board controla la forma perfectamente */
+}
+.column:hover { background: #363058; }
+.column:active { transform: scale(0.98); }
+.column.warn { box-shadow: inset 0 0 0 2px #ff5470; }
+
+.col-inner {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.card {
+  width: 100%;
+  flex: 0 0 calc(100% / 8); /* Se mantiene estricto el requisito de 8 cartas de límite */
+  min-height: 0;
+  border-radius: 8px; /* Bordes un poco más suaves */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  
+  /* NUEVO: Aumentamos el tamaño máximo de la fuente a 28px */
+  font-size: clamp(14px, 4cqw, 28px); 
+  
+  color: #1a1626;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  animation: drop 0.2s ease-out;
+  user-select: none;
+  outline: 1px solid rgba(0,0,0,0.15);
+  outline-offset: -1px;
+}
+
+.column { container-type: inline-size; }
+
+
+#current-card {
+  width: 70px;
+  max-width: 70px;
+  animation: none;
+}
+
+@keyframes drop {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes merge-pop {
+  0%   { transform: scale(1); filter: brightness(1); }
+  40%  { transform: scale(1.22); filter: brightness(1.6); box-shadow: 0 0 18px rgba(255,176,32,0.7); }
+  70%  { transform: scale(0.96); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.card.merge {
+  animation: merge-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 2;
+}
+
+@keyframes slot-shake {
+  0%, 100% { transform: translate(0, 0); }
+  15%      { transform: translate(-3px, 1px); }
+  30%      { transform: translate(3px, -1px); }
+  45%      { transform: translate(-2px, 2px); }
+  60%      { transform: translate(2px, -1px); }
+  80%      { transform: translate(-1px, 1px); }
+}
+.column.shake {
+  animation: slot-shake 0.4s ease-in-out;
+  box-shadow: inset 0 0 0 2px rgba(255,176,32,0.6), 0 0 20px rgba(255,176,32,0.35);
+}
+
+/* Value colors */
+.v-2    { background: #eee4da; }
+.v-4    { background: #ede0c8; }
+.v-8    { background: #f2b179; color: #fff; }
+.v-16   { background: #f59563; color: #fff; }
+.v-32   { background: #f67c5f; color: #fff; }
+.v-64   { background: #f65e3b; color: #fff; }
+.v-128  { background: #edcf72; color: #fff; }
+.v-256  { background: #edcc61; color: #fff; }
+.v-512  { background: #edc850; color: #fff; }
+.v-1024 { background: #edc53f; color: #fff; font-size: clamp(12px, 3vw, 16px); }
+.v-2048 { background: #edc22e; color: #fff; font-size: clamp(12px, 3vw, 16px); box-shadow: 0 0 20px #ffb020; }
+
+.message {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 10;
+  color: white;
+  text-align: center;
+  padding: 24px;
+}
+.message > div:first-child {
+  font-size: clamp(24px, 6vw, 34px);
+  font-weight: 800;
+}
+.msg-score { font-size: 16px; color: var(--accent); }
+.msg-question { font-size: 15px; color: var(--muted); margin-top: 4px; }
+.msg-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.06); box-shadow: none; }
+.message.hidden { display: none; }
+
+/* Responsive */
+@media (max-width: 780px) {
+  .game {
+    grid-template-columns: 1fr;
+    padding: 14px;
+    gap: 14px;
+  }
+  .how-to { order: 2; font-size: 12px; }
+  .play-area { order: 1; }
+}
+
+@media (max-width: 420px) {
+  .topbar { padding: 10px 14px; }
+  .topbar h1 { font-size: 18px; }
+  .board { gap: 6px; padding: 8px; width: min(100%, 340px); }
+  #current-card { width: 60px; max-width: 60px; }
+}
+

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Solitario 2048</title>
+<link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Solitario <span class="accent">2048</span></h1>
+    <div class="controls">
+      <div class="score">
+        <span class="score-label">Puntos</span>
+        <span id="score" class="score-value">0</span>
+      </div>
+      <button id="restart" class="btn">Reiniciar</button>
+    </div>
+  </header>
+
+  <main class="game">
+    <aside class="how-to" aria-label="Cómo jugar">
+      <h2>Cómo jugar</h2>
+      <ol>
+        <li>Toca una columna para dejar caer la carta.</li>
+        <li>Dos cartas iguales adyacentes se fusionan y duplican su valor.</li>
+        <li>Las fusiones pueden encadenarse hacia abajo.</li>
+        <li>Llega a <strong>2048</strong> para vaciar la columna y ganar bonus.</li>
+        <li>Si una columna alcanza <strong>8 cartas</strong>, pierdes.</li>
+      </ol>
+    </aside>
+
+    <section class="play-area">
+      <div class="deck-area">
+        <div class="deck-label">Siguiente carta</div>
+        <div id="deck" class="deck">
+          <div id="current-card" class="card">-</div>
+        </div>
+      </div>
+
+      <section id="board" class="board">
+        <div class="column" data-col="0"><div class="col-inner"></div></div>
+        <div class="column" data-col="1"><div class="col-inner"></div></div>
+        <div class="column" data-col="2"><div class="col-inner"></div></div>
+        <div class="column" data-col="3"><div class="col-inner"></div></div>
+      </section>
+    </section>
+
+    <div id="message" class="message hidden"></div>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
